@@ -1,0 +1,33 @@
+<style>
+	.table-bordered, .table-bordered td {
+		border-collapse: collapse;
+		border:solid 1px #000;
+	}
+
+
+</style>
+<table border="0" width="99%">
+<tr>
+	<td width="20%" style="text-align:left">
+	<img src="data:image/jpg;base64,<%= Base64.encode64(open(Rails.root.to_s + '/public/images/scouts.jpg'){ |io| io.read }) %>" width="150" style="padding-top:10px;padding-left:10px;"></img>
+	</td>
+	<td width="60%" style="text-align:center">
+		<h3>CUBS INTEREST BADGE:</h3>
+		<h3><%= @badge.name.upcase %></h3>
+	</td>
+	<td width="20%" style="text-align:right">
+	<% if !@badge.image.blank? %>
+		<img src="data:image/png;base64,<%= Base64.encode64(open(@badge.image.current_path){ |io| io.read }) %>" style="padding-top:10px;padding-left:10px;"/>
+	<% end %>
+	</td>
+</tr>
+</table>
+<table border="0">
+<tr>
+	<td width="100">&nbsp;</td>
+	<td style="padding-top:100px;">
+		<%=raw @badge.requirements %>
+	</td>
+	<td width="100">&nbsp;</td>
+</tr>
+</table>

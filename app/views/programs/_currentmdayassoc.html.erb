@@ -1,0 +1,163 @@
+<% time_line = @program.start_time if @program.start_time != nil%>
+<% time_line = Time.now if @program.start_time == nil%>
+<% over_time = false %>
+<% daybreaks = 1 %>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr class="primary">
+            <td width="5px">
+            </td>
+            <td>
+                Time
+            </td>
+			<td>
+				Entry
+			</td>
+			<td>
+				Cateogry
+			</td>
+			<td>
+				Advancement
+			</td>
+			<td>
+				Type
+			</td>
+			<td>
+                Mins
+			</td>
+            <td>
+            </td>
+		</tr>
+	</thead>
+	<tbody id="table_body">
+        <% ordered_entries = @program.ordered_entries %>
+		<% ordered_entries.each do |entry| %>
+            <% @program.daybreaks.each do |d,t| %>
+               <% future_time = time_line + entry.real_time(current_program).minutes if ordered_entries.index(entry)  %>
+               <% if t >= time_line and t <= future_time %>
+                 <% daybreaks += 1 %>
+                 <%= render :partial => '/programs/daybreak', :locals => {t: t,d: d} %>
+                 <% time_line = t %>
+               <% end %>
+            <% end %>
+
+            <tr class="info linksentences">
+            <td>Link sentence</td>
+                <td colspan="5">
+                    <% lsentence = entry.lsentences.where(:program => current_program).first %>
+                    <input class="form-control input-sm" id="lsentry_<%= entry.id.to_s %>" value="<%= lsentence.comment if !lsentence.blank?%>">
+                </td>
+                <td>
+                     <% tempid = "scouter_id_" + entry.id.to_s %>
+                     <%= select("eventscouter", tempid, Scouter.all.order(:name).collect {|p| [ p.name, p.id ] },{:selected => Eventscouter.where(:program => @program, :entry => entry).first.scouter.id},{:class => 'form-control input-sm'})%>
+                     <% geturl = url_for :controller => 'programs', :action => 'update_scouter_entry', :entry_id => entry.id %>
+                     <script>
+                         $('#eventscouter_scouter_id_<%= entry.id.to_s %>').change(function(){$.ajax({url : '<%= geturl %>&scouter_id=' + $('#eventscouter_scouter_id_<%= entry.id.to_s %>').val()})});
+                     </script>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;
+                    <% savelsent = 'update_linksentence(' + entry.id.to_s + ',document.getElementById("lsentry_' + entry.id.to_s + '").value)' %>
+                    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-floppy-disk', :style => 'cursor:pointer;', :onclick => savelsent, :title => 'Click to save the linking sentence text' ,:id => 'lsicon_' + entry.id.to_s )%>
+                    <script>
+                            $("#lsentry_<%= entry.id.to_s %>").keyup(function() { $('#lsicon_<%= entry.id.to_s %>').show()});
+                    </script>
+                </td>
+            </tr>
+			<tr id="entry_order[<%= entry.id %>]" <%=raw 'class="danger" ' if over_time %> <%=raw 'class="success"' if !over_time %>>
+                <td>
+                    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-arrow-right dragentry', :style => 'cursor:pointer;', :id => 'entry_drag_' + entry.id.to_s) %>
+                </td>
+                <td>
+                    <%= time_line.to_s(:short) %>
+                </td>
+                <td>
+					<%= entry.name %>
+				</td>
+                <td>
+					<%= entry.category.name  %>
+				</td>
+                <td>
+					<%= entry.advancement.name if !entry.advancement.blank? %>
+				</td>
+                <td>
+					<%= entry.cattype.name if !entry.cattype.blank? %>
+				</td>
+                <td>
+                    <% custom_time_update = 'custom_time_update(this.value,' + entry.id.to_s + ')' %>
+                    <%= select_tag "entry_time[" + entry.id.to_s + "]", options_for_select((entry_time_options),entry.real_time(current_program)), :onchange => custom_time_update %>
+                </td>
+                <td>
+                <% if ordered_entries.index(entry) != 0 %>
+                    <% click = 'change_order_up(' + ordered_entries.index(entry).to_s + ')' %>
+                    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-arrow-up', :style => 'cursor:pointer;', :onclick => click) %>
+                <% else %>
+                    &nbsp;&nbsp;&nbsp;
+                <% end %>
+                <% if ordered_entries.index(entry) != ordered_entries.count-1 %>
+                    <% click = 'change_order_down(' + ordered_entries.index(entry).to_s + ')' %>
+                    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-arrow-down', :style => 'cursor:pointer;', :onclick => click) %>
+                <% else %>
+                    &nbsp;&nbsp;&nbsp;
+                <% end %>
+                </td>
+			</tr>
+                    <% time_line = time_line + entry.real_time(current_program).minutes if ordered_entries.index(entry) %>
+                    <% over_time = true if time_line > @program.real_end_time %>
+		<% end %>
+
+        <% (daybreaks+1..@program.running_days).each do |d| %>
+            <%= render :partial => '/programs/daybreak', :locals => {t: @program.daybreaks[d],d: d} %>
+            <% time_line = @program.daybreaks[d] %>
+            <% over_time = true if time_line > @program.real_end_time %>
+        <% end %>
+
+        <tr <%=raw 'class="danger"' if over_time %>><td></td><td><%= time_line.to_s(:short) %></td><td colspan="6" align="left" >End</td></tr>
+	</tbody>
+</table>
+<script>
+    $(".glyphicon-floppy-disk").toggle();
+    function change_order_down(entry) {
+        <% geturl = url_for :controller => 'programs', :action => 'entry_down' %>
+        $.ajax({url : '<%= geturl %>?idx=' + entry});
+    }
+    function change_order_up(entry) {
+        <% geturl = url_for :controller => 'programs', :action => 'entry_up' %>
+        $.ajax({url : '<%= geturl %>?idx=' + entry});
+    }
+    function custom_time_update(time,id) {
+        <% geturl = url_for :controller => 'programs', :action => 'custom_time' %>
+        $.ajax({url : '<%= geturl %>?time=' + time + '&entry_id=' + id});
+    }
+    function link_sentences_toggle() {
+        $(".linksentences").toggle();
+        <% geturl = url_for :controller => 'programs', :action => 'view_link_sentences' %>
+        $.ajax({url : '<%= geturl %>'});
+    }
+    function update_linksentence(ls,value) {
+        <% geturl = url_for :controller => 'programs', :action => 'update_linksentence' %>
+        $.ajax({url : '<%= geturl %>?entry_id=' + ls + '&comment=' + value});
+        $('#lsicon_' +  ls).hide();
+    }
+    <% if !current_program.viewlinked %>
+        $(".linksentences").toggle();
+    <% end %>
+    $('#start_date').change(function() {
+        <% geturl = url_for :controller => 'programs', :action => 'update_start_date' %>
+        var temp = ($('#program_start_time').val());
+        $.ajax({url : '<%= geturl %>?start_time=' + temp});
+    });
+    $('#end_date').change(function() {
+        <% geturl = url_for :controller => 'programs', :action => 'update_end_date' %>
+        var temp = ($('#program_end_time').val());
+        $.ajax({url : '<%= geturl %>?end_time=' + temp});
+    });
+    $('.dragentry').draggable(function() {} );
+    $('.dropentry').droppable({
+        drop: function(event, ui) {
+                var entry = ui.draggable.attr("id");
+                var day = $(this).attr("id");
+                 <% geturl = url_for :controller => 'programs', :action => 'drop_entry' %>
+                 $.ajax({url : '<%= geturl %>?entry=' + entry + "&day=" + day}); }
+     });
+</script>
+<hr/>

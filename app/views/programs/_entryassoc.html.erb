@@ -1,0 +1,36 @@
+<h4 class="pull-right">Associate entries with program</h4>
+
+<div class="btn-group form-inline">
+    <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+      Add entry
+      <span class="caret"></span>
+    </button>&nbsp;
+    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this option to create a new entry by first selecting the category from the dropdown when clicking the button. Because your are editinga program the entries you make will automatically be added to this program.') %>
+&nbsp;<span class="glyphicon glyphicon-eye-close" title="Click to hide / show the linking sentences and responsibe scouter" onclick="link_sentences_toggle();" style="cursor:pointer;"></span>
+    <ul class="dropdown-menu" role="menu">
+        <% Category.visable.each do |category| %>
+            <li><%= link_to category.name, :controller => 'entries', :action => 'new', :cat_id => category.friendly_id , :return_program => @program.slug%></li>
+        <% end %>
+    </ul>
+</div>
+<div style="clear:both; padding:3px;"></div>
+
+<%= text_field 'program', :entry_tokens, "data-pre" => @program.ordered_entries.map {|model| {:id => model.id, :name => model.name}}.to_json %>
+<script>
+$(function() {
+  $("#program_entry_tokens").tokenInput("/entries/tokensearch.json", {
+    crossDomain: false,
+    prePopulate: $("#program_entry_tokens").data("pre"),
+    preventDuplicates: true,
+    theme: "facebook"
+  });
+});
+<% geturl = url_for :controller => 'programs', :action => 'update_assoc' %>
+$('#program_entry_tokens').change(function() {
+     $.ajax({url : '<%= geturl %>?program_id=<%= @program.slug %>&tokens=' + this.value });
+});
+</script>
+<br/>
+<div id="current_associations">
+    <%= render :partial => 'currentassoc' %>
+</div>

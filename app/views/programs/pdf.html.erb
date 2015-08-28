@@ -1,0 +1,96 @@
+<head>
+ <meta name="pdfkit-orientation" content="Landscape"/>
+</head>
+<style type="text/css">
+body {font-size :8pt;}
+@page { size : portrait }
+@page rotated { size : landscape }
+table1 { page-break-inside : avoid }
+  .avoid {
+    page-break-inside: avoid !important;
+    margin: 4px 0 4px 0;  /* to keep the page break from cutting too close to the text in the div */
+  }
+.left { border-left:solid 1px #000}
+.bottom { border-bottom:solid 1px #000}
+.top { border-top:solid 1px #000}
+.right { border-right:solid 1px #000}
+</style>
+
+<strong><h2><%= @program.name %></h2></strong>
+<strong><%= @program.real_start_time.to_s(:short) %></strong>
+<br/>
+<strong>Duty six : <%= @program.duty_six %></strong>
+<% time_line = @program.real_start_time %>
+<br/><br/>
+<table align="center" width="100%" cellspacing="0" cellpadding="1">
+<thead>
+    <th width="10%" class="left top right bottom">
+        Start
+    </th>
+    <th width="5%" class="top right bottom">
+        Time
+    </th>
+    <th width="20%" class="top right bottom">
+        Activity
+    </th>
+    <th width="29%" class="top right bottom">
+        Requirements
+    </th>
+    <th width="28%" class="top right bottom">
+        Instructions
+    </th>
+    <th width="8%" class="top right bottom">
+        Scouter
+    </tt>
+</thead>
+</table>
+<% @program.ordered_entries.each do |entry| %>
+    <table align="center" width="100%" cellspacing="0" cellpadding="1">
+    <% ls = entry.lsentences.where(:program => @program).first %>
+    <% if !ls.blank? and !ls.comment.blank? %>
+    <tr style="background-color:#dde5ec">
+        <td colspan="6" align="center" class="left right bottom top">
+           <strong><%= ls.comment %></strong>
+        </td>
+    </tr>
+    <% end %>
+    <tr>
+        <td valign="top" width="10%" class="left bottom right top" align="center">
+            <%= time_line.to_s(:short) %>
+        </td>
+        <td valign="top" width="5%" align="center" class="bottom right top">
+            <%= entry.real_time(@program).to_s %>
+        </td>
+        <td valign="top" width="20%" class="bottom right top">
+            <strong><%= entry.category.name + " : " if !entry.category.blank? %></strong>
+            <%= entry.name %>
+        </td>
+        <td valign="top" width="29%" class="bottom right top">
+             <%=raw entry.resources.gsub(%r{<img/?[^>]+?>}, '').gsub(%r{class=\"/?[^\"]+?\"}, '').gsub(%r{style=\"/?[^\"]+?\"}, '') if !entry.resources.blank? %>&nbsp;
+        </td>
+        <td valign="top" width="28%" class="bottom right top">
+            <%=raw entry.instructions.gsub(%r{<img/?[^>]+?>}, '').gsub(%r{class=\"/?[^\"]+?\"}, '').gsub(%r{style=\"/?[^\"]+?\"}, '') if !entry.instructions.blank? %>&nbsp;
+            <%= 'See attached' if entry.instructions.blank? %>
+        </td>
+        <td valign="top" width="8%" class="bottom right top" align="center">
+            <%= Eventscouter.where(:program => @program, :entry => entry).first.scouter.name %>
+        </td>
+        <% time_line = time_line + entry.real_time(@program).minutes if @program.ordered_entries.index(entry) %>
+    </tr>
+    </table>
+<% end %>
+<br/>
+Programme prepared by <%= current_user.name %> <%= " of " + current_user.group.to_s if !current_user.group.blank? %> on <%= Time.now.to_s(:short) %>
+
+<% if !@program.venue.blank? %>
+    <%=raw '<div style="page-break-after: always;"></div>' %>
+    <% @venue = @program.venue %>
+    <%= render :partial => '/venues/show' %>
+<% end %>
+
+<% @program.ordered_entries.each do |entry| %>
+    <% @entry = entry %>
+    <%=raw '<div style="page-break-after: always;"></div>' if @entry.instructions.blank? %>
+    <%= render :partial => '/entries/show' if @entry.instructions.blank? %>
+<% end %>
+

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grand Howl</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+    <script>
+        $(document).bind('ajaxStart', function(){
+            $('#loading_image').show();
+        }).bind('ajaxStop', function(){
+            $('#loading_image').hide();
+    });
+    </script>
+
+<% if @entry.blank? %>
+<meta property="og:image" content="<%= "http://" + request.host %>/images/wolf2.png"/>
+<meta property="og:url" content="<%= "http://" + request.host %>"/>
+<meta property="og:title" content="Grand Howl"/>
+<meta property="og:description" content="The Grand Howl is a collaborative platform for sharing ideas, resources and tools amongst Pack Scouters in South Africa."/>
+<% end %>
+
+<%if !@entry.blank? %>
+<%if @entry.id != nil %>
+<meta property="og:image" content="<%= "http://" + request.host + @entry.real_image.landing.url%>"/>
+<meta property="og:url" content="<%= request.original_url %>"/>
+<meta property="og:title" content="<%= @entry.name %>"/>
+<meta property="og:description" content="<%= @entry.short_description %>"/>
+
+<% end %>
+<% end %>
+
+
+</head>
+<body>
+<div id="overlay_box"></div>
+<div id="loading_image_holder" style="background:transparent;width:100%;height:100%">
+<div id="loading_image" style="position:fixed;left: 50%;top: 45%;display: none;background: transparent url('/images/ajax-loader.gif');z-index: 2000;height: 31px;width: 31px;"></div>
+</div>
+
+<div id="wrapper">
+	<%= render 'main/nav' %>
+	<div id="page-content-wrapper">
+        <div style="padding-left:5px;">
+		<%= yield %>
+        </div>
+	</div>
+</div>
+</body>

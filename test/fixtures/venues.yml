@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  slug: MyString
+  is_camp: false
+  is_day: false
+  description: MyText
+  activities: MyText
+  pros: MyText
+  cons: MyText
+  user_id: 1
+  image: MyString
+
+two:
+  name: MyString
+  slug: MyString
+  is_camp: false
+  is_day: false
+  description: MyText
+  activities: MyText
+  pros: MyText
+  cons: MyText
+  user_id: 1
+  image: MyString

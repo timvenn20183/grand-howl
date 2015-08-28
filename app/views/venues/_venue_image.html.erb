@@ -1,0 +1,5 @@
+<% if !@venue.image.blank? %>
+	<%= image_tag(@venue.image.landing.url) %><br/>
+    <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-trash pull-right', :style => 'color : #333;'), { controller: :venues, action: :remove_image, id: @venue.slug }, method: :delete, data: { confirm: 'Are you sure you wish to delete this image ?', :remote => true } %>
+<% end %>
+

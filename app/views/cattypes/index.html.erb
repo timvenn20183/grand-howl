@@ -1,0 +1,29 @@
+<h1>Listing cattypes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Category</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cattypes.each do |cattype| %>
+      <tr>
+        <td><%= cattype.name %></td>
+        <td><%= cattype.category_id %></td>
+        <td><%= link_to 'Show', cattype %></td>
+        <td><%= link_to 'Edit', edit_cattype_path(cattype) %></td>
+        <td><%= link_to 'Destroy', cattype, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cattype', new_cattype_path %>

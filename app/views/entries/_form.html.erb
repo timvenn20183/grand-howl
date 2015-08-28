@@ -1,0 +1,284 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr class="primary">
+      <td>
+        &nbsp;
+      </td>
+    </tr>
+  </thead>
+</table>
+<%= form_for(@entry, :html => { :id => "entry_form", :multipart => true}) do |f| %>
+    <%= hidden_field_tag 'cat_id', @category.friendly_id %>
+    <% if !@return_program.blank? %>
+        <%= hidden_field_tag 'return_program', @return_program.slug %>
+    <% end %>
+  <% if @entry.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@entry.errors.count, "error") %> prohibited this activity from being saved:</h2>
+
+      <ul>
+      <% @entry.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+  <div class="form-group">
+    <label for="category_id" class="col-md-2 control-label">Category&nbsp;
+    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the category assigned to this entry') %>
+    </label>
+    <div class="col-md-4">
+        <%#= select("entry", "category_id", Category.all.collect {|p| [ p.name, p.id ] })%>
+        <strong><%= @entry.category.name %></strong>
+    </div>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Name&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the name of the entry') %>
+    </label>
+    <div class="col-md-4">
+      <%= f.text_field :name, :class => "form-control", :placeholder => 'Name' %>
+    </div>
+  </div>
+
+
+  <% if @entry.category.cattypes.count > 0 %>
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="category_id" class="col-md-2 control-label">Type&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this to select the type of category') %>
+    </label>
+    <div class="col-md-4">
+    <%= select("entry", "cattype_id", @entry.category.cattypes.collect {|p| [ p.name, p.id ] })%>
+    </div>
+  </div>
+  <% end %>
+
+
+    <% if is_admin_user %>
+    <div style="clear:both; padding:10px;"></div>
+     <div class="form-group">
+        <label class="col-md-2 control-label">
+         Is a default entry ?
+        </label>
+         <div class="col-md-4">
+            <%= f.check_box :isdefault %>
+         </div>
+      </div>
+    <% end %>
+
+    <div style="clear:both; padding:10px;"></div>
+    <label for="image" class="col-md-2 control-label">Image&nbsp;
+  <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to upload a placeholder image for this entry which will appearr when viewing the entry.') %>
+    </label>
+    <div class="col-md-4">
+    <input type="file" class="form-control" id="image" name="entry[raw]">
+    </div>
+       <div class="col-md-4 text-center" id="entry_image">
+            <%= render :partial => '/entries/entry_image' %>
+        </div>
+
+  <% if @entry.category.options[:has_badge] == true %>
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="category_id" class="col-md-2 control-label">Badge&nbsp;
+    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this option to select the badge related to this entry') %></label>
+    <div class="col-md-4">
+    <%= select("entry", "badge_id", Badge.all.collect {|p| [ p.name, p.id ] }, {include_blank: 'None'})%>
+    </div>
+  </div>
+  <% end %>
+
+  <% if @entry.category.options[:advancements] == true %>
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="category_id" class="col-md-2 control-label">Advancement&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this option to select which advancement, if any, this entry relates to.') %>
+        </label>
+    <div class="col-md-4">
+    <%= select("entry", "advancement_id", Advancement.all.collect {|p| [ p.name, p.id ] }, {include_blank: 'None'})%>
+    </div>
+  </div>
+  <% end %>
+
+
+  <% if @entry.category.options[:has_time] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Time to allocate (mins)&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the time, in minutes, that the entry should take to complete.') %>
+    </label>
+    <div class="col-md-1">
+      <%= f.text_field :time, :class => "form-control" ,:placeholder => ''%>
+    </div>
+  </div>
+  <% end %>
+
+  <% if @entry.category.options[:has_theme] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-md-2 control-label">Search tags&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This field is important as it provides a way to tag the entry and assist with searching. e.g. cooking, easy, sweet') %>
+    </label>
+    <div class="col-md-10">
+      <%= f.text_field :description, :class => "form-control", :placeholder => 'Supply search tags', :id => 'desc_content' %>
+    </div>
+  </div>
+  <% end %>
+
+
+  <% if @entry.category.options[:has_outcome] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-md-2 control-label">Outcome&nbsp;
+     <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to detail the outcomes of the entry.') %></label>
+    <div class="col-md-10">
+      <%= f.text_area :outcome, :class => "form-control", :placeholder => 'Supply an outcome', :id => 'out_content'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#out_content').summernote();
+        });
+    </script>
+  </div>
+  <% end %>
+
+  <% if @entry.category.options[:has_resources] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-md-2 control-label">Resources&nbsp;
+     <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to detail the resources required for this entry.') %>
+     </label>
+    <div class="col-md-10">
+      <%= f.text_area :resources, :class => "form-control", :placeholder => 'Supply the resources', :id => 'res_content' %>
+    </div>
+    <script>
+            $(document).ready(function() {
+              $('#res_content').summernote();
+            });
+    </script>
+
+
+  </div>
+  <% end %>
+
+
+  <% if @entry.category.options[:has_instructions] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-lg-2 control-label">Instructions&nbsp;
+       <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to detail the instructions for this entry.') %>
+     </label>
+    <div class="col-lg-10">
+      <%= f.text_area :instructions, :class => "form-control", :placeholder => 'Supply the instructions', :id => 'ins_content' %>
+      <script>
+        $(document).ready(function() {
+          $('#ins_content').summernote();
+        });
+      </script>
+
+
+    </div>
+  </div>
+  <% end %>
+
+  <% if @entry.category.options[:has_other] == true %>
+  <div style="clear:both; padding:10px;"></div>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-lg-2 control-label">Other&nbsp;
+         <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to detail any other details or useful information for this entry.') %>
+         </label>
+    <div class="col-lg-10">
+      <%= f.text_area :other, :class => "form-control", :placeholder => 'Supply any other information' , :id => 'other_content' %>
+      <script>
+        $(document).ready(function() {
+          $('#other_content').summernote();
+        });
+      </script>
+
+
+    </div>
+  </div>
+  <% end %>
+
+  <% if @entry.category.options[:has_story] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-lg-2 control-label">Story&nbsp;
+         <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to detail the story for this entry.') %>
+         </label>
+    <div class="col-lg-10">
+      <%= f.text_area :story, :class => "form-control", :placeholder => 'Supply the words to a story' , :id => 'story_content'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#story_content').summernote();
+        });
+    </script>
+  </div>
+  <% end %>
+
+
+  <% if @entry.category.options[:has_song] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-lg-2 control-label">Song&nbsp;
+         <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to detail the song for this entry.') %>
+         </label>
+    <div class="col-lg-10">
+      <%= f.text_area :song, :class => "form-control", :placeholder => 'Supply the words to a song', :id => 'song_content' %>
+    <script>
+        $(document).ready(function() {
+          $('#song_content').summernote();
+        });
+    </script>
+
+    </div>
+  </div>
+  <% end %>
+
+  <% if @entry.category.options[:has_play] == true %>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-lg-2 control-label">Play&nbsp;
+         <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to the words for the play.') %>
+         </label>
+    <div class="col-lg-10">
+      <%= f.text_area :play, :class => "form-control", :placeholder => 'Supply the words to a play', :id => 'play_content' %>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#play_content').summernote();
+        });
+    </script>
+  </div>
+  <% end %>
+  <div style="clear:both; padding:10px;"></div>
+  <button onclick="$('#entry_form').submit(); return false;" class="btn btn-default pull-right">
+    <%= 'Add' if @entry.id == nil %>
+    <%= 'Update' if @entry.id != nil %>
+  </button>
+  <br/>
+  <br/>
+<% end %>
+    <hr/>
+    <div id="documents">
+        <%= render :partial => 'documents/index' if @entry.id != nil %>
+    </div>
+
+

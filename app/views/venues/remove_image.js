@@ -1,0 +1,1 @@
+$('#venue_image').html("");

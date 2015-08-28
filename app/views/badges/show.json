@@ -1,0 +1,5 @@
+<% b = @badge.as_json %>
+<% b['requirements'] = Base64.encode64(@badge.requirements) %>
+<% b['mobile_image'] = @badge.image.pdf.url if !@badge.image.blank? %>
+<% b['mobile_image'] = '' if @badge.image.blank? %>
+<%=raw b.to_json %>

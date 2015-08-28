@@ -1,0 +1,43 @@
+<!-- Sidebar -->
+<div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+            <a href="/admin">
+                <font color="white">Grand Howl</font>
+            </a>
+        </li>
+        <li>
+            <font color="white"><h5><%= current_user_name %></h5></font>
+        </li>
+        <li>
+            <a href="/admin/categories">Categories</a>
+        </li>
+        <li>
+            <a href="/admin/badges">Badges</a>
+        </li>
+        <li>
+            <a href="/admin/advancements">Advancements</a>
+        </li>
+        <li>
+            <a href="/admin/users">Users</a>
+        </li>
+	<li>
+	    <a href="/"><font color="#FFF"><strong>Main site</strong></font></a>
+	</li>
+        <li>
+	    <a href="/logout"><font color="#FFF"><strong>Logout</strong></font></a>
+        </li>
+        <li class="text-center">
+                <br/>
+                <img src="/images/howl.png"width=100/>
+        </li>
+    </ul>
+</div>
+
+<script>
+$("#menu-toggle").click(function(e) {
+    e.preventDefault();
+    $("#wrapper").toggleClass("toggled");
+});
+</script>
+

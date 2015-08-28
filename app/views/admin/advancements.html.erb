@@ -1,0 +1,42 @@
+<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-plus', :style => 'color : #333;'), { controller: :advancements, action: :new } %>
+<h3 class="pull-right">Advancements</h3>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr class="primary">
+			<td>
+				Name
+			</td>
+            <td>
+                Level
+            </td>
+            <td>
+                Challenge
+            </td>
+			<td align="right">
+				Action&nbsp;
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<% @advancements.each do |advancement| %>
+			<tr style="cursor:pointer">
+				<td  onclick="window.location.href = '/advancements/view/<%= advancement.slug %>'">
+					<%= advancement.name %>
+				</td>
+				<td  onclick="window.location.href = '/advancements/view/<%= advancement.slug %>'">
+					<%= advancement.advlevel.name if !advancement.advlevel.blank? %>
+				</td>
+				<td  onclick="window.location.href = '/advancements/view/<%= advancement.slug %>'">
+					<%= advancement.challenge.name if !advancement.challenge.blank? %>
+				</td>
+				<td align="right">
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;'), { controller: :advancements, action: :edit, id: advancement.friendly_id }, method: :edit %>
+					&nbsp;&nbsp;
+					<% if advancement.entries.count == 0 %>
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-trash', :style => 'color : #333;'), { controller: :advancements, action: :destroy, id: advancement.friendly_id }, method: :delete, data: { confirm: 'Are you sure you wish to delete this advancement ?' } %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>

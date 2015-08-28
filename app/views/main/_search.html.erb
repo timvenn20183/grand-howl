@@ -1,0 +1,15 @@
+<div class="row">
+    <div class="col-md-12 text-center">
+<%= render :partial => '/main/facebook' %>
+    	<form id="search_form" class="form-inline " action="/search" method="get">
+        <div class="form-group pull-right has-success">
+    <input type="text" class="form-control" id="name" name="search" placeholder="Enter search">
+    &nbsp;
+  <button onclick="$('#search_form').submit(); return false;" class="btn btn-success pull-right">
+ Search
+  </button>
+  	</form>
+    </div>
+</div>
+</div>
+

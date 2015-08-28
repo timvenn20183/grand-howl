@@ -1,0 +1,26 @@
+<h3 class="pull-right"><%= @advancement.name %></h3>
+<br/>
+<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-print', :style => 'color : #333;',:title => 'Download pdf'), { controller: :advancements, action: :pdf, id: @advancement.friendly_id , format: :pdf}, method: :get,:target => "_new"  %>
+<% if is_admin_user %>
+        &nbsp;&nbsp;<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;'), { controller: :advancements, action: :edit, id: @advancement.friendly_id }, method: :edit %>
+<% end %>
+<hr/>
+<table class="table table-striped table-hover">
+<% if !@advancement.advlevel.blank? %>
+<tr>
+    <td><strong>Level</strong></td>
+    <td><%= @advancement.advlevel.name if !@advancement.advlevel.blank? %></td>
+</tr>
+<% end %>
+<% if !@advancement.challenge.blank? %>
+<tr>
+    <td><strong>Challenge</strong></td>
+    <td><%= @advancement.challenge.name if !@advancement.challenge.blank? %></td>
+</tr>
+<% end %>
+<tr>
+	<td><strong>Description</strong></td>
+	<td><%=raw @advancement.description %></td>
+</tr>
+</table>
+<hr/>

@@ -1,0 +1,73 @@
+<div class="row">
+<div class="col-md-12 text-center" style="background:url('/images/wolf.png') center no-repeat; height:150px; background-size: contain;">
+	<div class="text-center" style="padding-left:500px;">
+		<h3 style="line-height:100px;"><%= @category.name.pluralize %></h3>
+	</div
+</div>
+</div>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr class="primary">
+			<td>
+				Name
+			</td>
+            <td>
+                Advancement
+            </td>
+            <td>
+                Challenge
+            </td>
+			<td>
+				Type
+			</td>
+			<td>
+				User
+			</td>
+			<td align="right">
+				Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<% @entries.each do |entry| %>
+            <tr style="cursor:pointer">
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>'">
+					<%= entry.name %>
+				</td>
+                <td onclick="window.location.href = '/entries/<%= entry.slug %>'">
+                    <%= entry.advancement.name if !entry.advancement.blank? %>
+                </td>
+                <td onclick="window.location.href = '/entries/<%= entry.slug %>'">
+                    <%= entry.advancement.challenge.name if !entry.advancement.blank? and !entry.advancement.challenge.blank? %>
+                </td>
+
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>'">
+					<%= entry.cattype.name if !entry.cattype.blank? %>
+				</td>
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>'">
+					<%= entry.user.name %>
+				</td>
+				<td align="right">
+                    <% if is_admin_user %>
+                     <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;'), { controller: :entries, action: :edit, id: entry.friendly_id }, method: :edit %>
+                    &nbsp;&nbsp;
+                    <% end %>
+
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-eye-open', :style => 'color : #333;', :title => 'View'), { controller: :entries, action: :show, id: entry.friendly_id }, method: :get %>
+					&nbsp;&nbsp;
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-print', :style => 'color : #333;',:title => 'Download pdf'), { controller: :main, action: :print, id: entry.friendly_id , format: :pdf}, method: :get,:target => "_new"  %>
+					&nbsp;&nbsp;
+					<%#= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-exclamation-sign', :style => 'color : #333;',:title => 'Report'), { controller: :entries, action: :report, id: entry.friendly_id }, method: :get %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<div class="row">
+	<div class="col-md-12 text-center">
+		<%= will_paginate @entries, renderer: BootstrapPagination::Rails %>
+	</div>
+</div>
+<script>
+$('.dropdown-toggle').dropdown()
+</script>

@@ -1,0 +1,39 @@
+<h3>
+    <%= 'Add type to category ' + @category.name if @cattype.id == nil%>
+    <%= 'Update type ' + @cattype.name if @cattype.id != nil %>
+</h3>
+<table class="table table-striped table-hover">
+  <thead>
+    <tr class="primary">
+      <td>
+        &nbsp;
+      </td>
+    </tr>
+  </thead>
+</table>
+
+<%= form_for(@cattype , :remote => true, :html => { :id => "cattype_form" , :class => 'form-inline'}) do |f| %>
+    <%= hidden_field_tag 'cat_id', @category.friendly_id %>
+  <% if @cattype.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cattype.errors.count, "error") %> prohibited this cattype from being saved:</h2>
+
+      <ul>
+      <% @cattype.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name" name="cattype[name]" placeholder="<%= @cattype.name %>" value="<%= @cattype.name %>">
+    &nbsp;
+  <button onclick="$('#cattype_form').submit(); return false;" class="btn btn-default pull-right">
+    <%= 'Add' if @cattype.id == nil %>
+    <%= 'Update' if @cattype.id != nil %>
+  </button>
+  </div>
+
+<% end %>

@@ -1,0 +1,79 @@
+<h3 class="pull-right"><%= @venue.name %></h3>
+<br/>
+<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-print', :style => 'color : #333;',:title => 'Download pdf'), { controller: :venues, action: :pdf, id: @venue.friendly_id , format: :pdf}, method: :get,:target => "_new"  %>
+<% if is_admin_user %>
+        &nbsp;&nbsp;<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;'), { controller: :venues, action: :edit, id: @venue.friendly_id }, method: :edit %>
+<% end %>
+<hr/>
+<%= render :partial => '/main/facebook' %>
+<div style="clear:both; padding:5px;"></div>
+<table class="table table-striped table-hover">
+<% if !@venue.image.blank? %>
+<tr>
+<td colspan="2" width="100%" align="center">
+	<%= image_tag(@venue.image.landing.url) %>
+</td>
+</tr>
+<% end %>
+<tr>
+	<td width="20%"><strong>Website URL</strong></td>
+	<td><%= @venue.website %></td>
+</tr>
+<tr>
+	<td width="20%"><strong>Contact No.</strong></td>
+	<td><%= @venue.tel %></td>
+</tr>
+<tr>
+	<td width="20%"><strong>Day outings ?</strong></td>
+	<td><%= 'Yes' if @venue.is_day %><%= 'No' if !@venue.is_day%></td>
+</tr>
+<tr>
+    <td width="20%"><strong>Camping ?</strong></td>
+    <td><%= 'Yes' if @venue.is_camp %><%= 'No' if !@venue.is_camp%></td>
+</tr>
+
+<tr>
+    <td width="20%"><strong>Area</strong></td>
+    <td><%= @venue.area %></td>
+</tr>
+<tr>
+    <td width="20%"><strong>Travel time</strong></td>
+    <td><%= @venue.time_from_city %></td>
+</tr>
+
+<tr>
+	<td width="20%"><strong>Province</strong></td>
+	<td><%= @venue.province.name if @venue.province != nil %></td>
+</tr>
+
+<% if !@venue.description.blank? %>
+	<tr>
+ 		<td><strong>Description</strong></td>
+ 		<td><%=raw @venue.description %></td>
+ 	</tr>
+<% end %>
+<% if !@venue.activities.blank? %>
+	<tr>
+ 		<td><strong>Activities</strong></td>
+ 		<td><%=raw @venue.activities %></td>
+ 	</tr>
+<% end %>
+<% if !@venue.pros.blank? %>
+	<tr>
+ 		<td><strong>Highlights</strong></td>
+ 		<td><%=raw @venue.pros %></td>
+ 	</tr>
+<% end %>
+<% if !@venue.cons.blank? %>
+	<tr>
+ 		<td><strong>Concerns</strong></td>
+ 		<td><%=raw @venue.cons %></td>
+ 	</tr>
+<% end %>
+
+</table>
+<hr/>
+<h5>Venue added by  <%= @venue.user.name %> <%= " of " + @venue.user.group if !@venue.user.group.blank? %></h5>
+<hr/>
+
+<%= render :partial => 'comments' %>

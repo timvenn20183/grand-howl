@@ -1,0 +1,63 @@
+<div class="row">
+<div class="col-sm-12 text-center" style="background:url('/images/wolf.png') center no-repeat; height:150px; background-size: contain;">
+    <div class="text-center" style="padding-left:500px;">
+        <h3 style="line-height:100px;">Contact</h3>
+    </div
+</div>
+</div>
+<div style="clear:both; padding:10px;"></div>
+
+<hr/>
+<br/>
+<div class="row">
+<div class="col-md-12 text-center">
+<p>Please use the form below to contact us.</p>
+</div>
+</div>
+<div class="row">
+	<div class="col-md-2"></div>
+  <div class="col-md-8">
+		<div class="panel panel-primary">
+    		<div class="panel-heading">
+        		Leave comment
+  		    </div>
+    		<div class="panel-body">
+    			<p>Many thanks for taking the time to view the website. Please feel free to use this form to get in contact with us.</p>
+
+			<form name="contact" class="form-horizontal" role="form" method="post" action="/contact_process">
+          <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+  				<div class="form-group">
+    				<label for="name" class="col-sm-2 control-label">Name</label>
+    				<div class="col-sm-10">
+      					<input type="name" class="form-control" id="name" name="name" placeholder="Name">
+   					</div>
+  				</div>
+  				<div class="form-group">
+    				<label for="email" class="col-sm-2 control-label">Email</label>
+    				<div class="col-sm-10">
+      					<input type="email" class="form-control" id="email" name="email" placeholder="Email">
+   					</div>
+  				</div>
+          <div class="form-group">
+            <label for="subject" class="col-sm-2 control-label">Subject</label>
+            <div class="col-sm-10">
+                <input type="subject" class="form-control" id="subject" name="subject" placeholder="General site enquiry" value="General site enquiry">
+            </div>
+          </div>
+  				<div class="form-group">
+    				<label for="message" class="col-sm-2 control-label">Message</label>
+    				<div class="col-sm-10">
+      					<textarea type="message" class="form-control" id="message" name="message" placeholder="Message"></textarea>
+   					</div>
+  				</div>
+  				<div class="form-group">
+    				<div class="col-sm-offset-2 col-sm-10">
+      					<button type="submit" class="btn btn-success pull-right">Leave comment</button>
+    				</div>
+  				</div>
+			</form>
+   			</div>
+		</div>
+	</div>
+  <div class="col-md-2"></div>
+</div>

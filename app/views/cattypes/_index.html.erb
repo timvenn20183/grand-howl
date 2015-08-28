@@ -1,0 +1,25 @@
+<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-plus', :style => 'color : #333;'), :controller => :cattypes, :action => 'new',:cat_id => @category.friendly_id, :remote => true %>
+<h3 class="pull-right">Types of <%= @category.name %></h3>
+
+<table class="table table-striped table-hover">
+        <thead>
+            <tr class="primary">
+                <td>Name</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+        <% @category.cattypes.all.each do |cattype| %>
+        <tr>
+            <td><%= cattype.name %></td>
+            <td>
+            <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;'), edit_cattype_path(cattype), :remote => true %>&nbsp;
+            <% if cattype.entries.count == 0 %>
+            <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-trash', :style => 'color : #333;'), cattype, method: :delete, data: { confirm: 'Are you sure?' }, :remote => true %>
+            <% end %>
+            </td>
+        </tr>
+    <% end %>
+        </tbody>
+</table>
+

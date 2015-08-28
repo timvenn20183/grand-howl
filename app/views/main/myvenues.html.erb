@@ -1,0 +1,47 @@
+<button type="button" class="btn btn-default" data-toggle="dropdown" onclick="window.location.href='/venues/new'">
+        Add Venue
+</button>
+<h3 class="pull-right">Venues for <%= current_user.name %></h3>
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="primary">
+            <td>
+                Name
+            </td>
+            <td>
+                Day / Camp
+            </td>
+            <td align="right" width="120">
+                Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <% @venues.each do |venue| %>
+            <tr style="cursor:pointer">
+                <td onclick="window.location.href = '/venues/<%= venue.slug %>'">
+                    <%= venue.name %>
+                </td>
+                <td onclick="window.location.href = '/venues/<%= venue.slug %>'">
+                    <%= "Day outing" if venue.is_day == true %> <%= ' / ' if venue.is_camp and venue.is_day %> <%= "Camping" if venue.is_camp == true %>
+                </td>
+                <td align="right">
+                    <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;',:title => 'Edit venue'), { controller: :venues, action: :edit, id: venue.friendly_id } %>
+                    &nbsp;&nbsp;
+                    <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-eye-open', :style => 'color : #333;',:title => 'View venue'), { controller: :venues, action: :show, id: venue.friendly_id } %>&nbsp;&nbsp;
+
+                    <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-print', :style => 'color : #333;',:title => 'Download pdf'), { controller: :venues, action: :pdf, id: venue.friendly_id , format: :pdf}, method: :get,:target => "_new"  %>
+                    &nbsp;&nbsp;
+                    <% if venue.can_delete %>
+                    <%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-trash', :style => 'color : #333;', :title => 'Click to delete'), { controller: :venues, action: :destroy, id: venue.friendly_id }, method: :delete, data: { confirm: 'Are you sure you wish to delete this venue ?'} %>
+                    <% else %>
+                        &nbsp;&nbsp;
+                    <% end %>
+                </td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+
+

@@ -1,0 +1,9 @@
+<% a = @advancement.as_json %>
+<% a["advlevel_name"] = @advancement.advlevel.name if !@advancement.advlevel.blank? %>
+<% a["advlevel_name"] = "" if @advancement.advlevel.blank? %>
+<% a["challenge_name"] = @advancement.challenge.name if !@advancement.challenge.blank? %>
+<% a["challenge_name"] = "" if @advancement.challenge.blank? %>
+<% temp_description = a["description"] %>
+<% a["description"] = Base64.encode64(temp_description) %>
+<%=raw a.to_json %>
+

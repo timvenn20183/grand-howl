@@ -1,0 +1,45 @@
+<h3 class="pull-right">Users</h3>
+<br/>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr class="primary">
+			<td>
+				Name
+			</td>
+            <td>
+                Email
+            </td>
+            <td>
+                Group
+            </td>
+			<td align="right">
+				Active
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+        <% geturl = url_for :controller => 'users', :action => 'disable' %>
+		<% @users.each do |user| %>
+			<tr>
+				<td>
+					<%= user.name %>
+				</td>
+                <td>
+                    <%= user.email %>
+                </td>
+                <td>
+                    <%= user.group  %>
+                </td>
+				<td align="right">
+                    <div class="bootstrap-switch-container">
+                        <input name="my-checkbox" class="bootstrap-switch-handle-on bootstrap-switch-primary" data-size="mini" type="checkbox" <%=raw ' checked ' if user.active == true %> onchange="$.ajax({url : '<%= geturl %>?user_id=<%= user.id %>'});">
+                        &nbsp;&nbsp;&nbsp;
+                    </div>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+<script>
+/*$("[name='my-checkbox']").bootstrapSwitch();*/
+</script>

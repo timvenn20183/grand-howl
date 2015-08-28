@@ -1,0 +1,181 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr class="primary">
+      <td>
+        &nbsp;
+      </td>
+    </tr>
+  </thead>
+</table>
+<%= form_for(@venue, :html => { :id => "venue_form", :multipart => true}) do |f| %>
+  <% if @venue.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@venue.errors.count, "error") %> prohibited this activity from being saved:</h2>
+
+      <ul>
+      <% @venue.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+
+    <% end %>
+
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Name&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the name of the venue') %>
+    </label>
+    <div class="col-md-4">
+      <%= f.text_field :name, :class => "form-control", :placeholder => 'Name' %>
+    </div>
+  </div>
+    <div style="clear:both; padding:10px;"></div>
+    <label for="image" class="col-md-2 control-label">Image&nbsp;
+  <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to upload a placeholder image for this venue which will appearr when viewing the venue.') %>
+    </label>
+    <div class="col-md-4">
+    <input type="file" class="form-control" id="image" name="venue[image]">
+    </div>
+       <div class="col-md-4 text-center" id="venue_image">
+            <%= render :partial => '/venues/venue_image' %>
+        </div>
+
+
+  <div style="clear:both; padding:10px;"></div>
+    <label for="is_day" class="col-md-2 control-label">Day outings&nbsp;
+    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Is this a day outing venue ?') %>
+    </label>
+ <div class="col-md-4">
+
+ <%= f.check_box :is_day %>
+
+</div>
+
+  <div style="clear:both; padding:10px;"></div>
+    <label for="is_camp" class="col-md-2 control-label">Camping&nbsp;
+    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Is this a camping venue ?') %>
+    </label>
+ <div class="col-md-4">
+ <%= f.check_box :is_camp %>
+
+</div>
+  <div style="clear:both; padding:10px;"></div>
+
+
+  <div class="form-group">
+    <label for="province" class="col-md-2 control-label">Province&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this to select the province') %>
+    </label>
+    <div class="col-md-4">
+    <%= select("venue", "province_id", Province.all.collect {|p| [ p.name, p.id ] })%>
+    </div>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Area / City&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the area of the venue') %>
+    </label>
+    <div class="col-md-4">
+      <%= f.text_field :area, :class => "form-control", :placeholder => 'Area' %>
+    </div>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="website" class="col-md-2 control-label">Website URL&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the website of the venue') %>
+    </label>
+    <div class="col-md-4">
+      <%= f.text_field :website, :class => "form-control", :placeholder => 'Website' %>
+    </div>
+  </div>
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="tel" class="col-md-2 control-label">Contact no.&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the contact no. of the venue') %>
+    </label>
+    <div class="col-md-4">
+      <%= f.text_field :tel, :class => "form-control", :placeholder => 'Contact no.' %>
+    </div>
+  </div>
+
+
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Time from nearest city (mins)&nbsp;
+        <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This is the time, in minutes, that the venue would take to get to from the nearest major city.') %>
+    </label>
+    <div class="col-md-1">
+      <%= f.text_field :time_from_city, :class => "form-control" ,:placeholder => ''%>
+    </div>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="description" class="col-md-2 control-label">Description&nbsp;
+     <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to describe the venue.') %></label>
+    <div class="col-md-10">
+      <%= f.text_area :description, :class => "form-control", :placeholder => 'Describe the venue', :id => 'desc_content'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#desc_content').summernote();
+        });
+    </script>
+  </div>
+  <div style="clear:both; padding:10px;"></div>
+
+
+  <div class="form-group">
+    <label for="activities" class="col-md-2 control-label">Activities&nbsp;
+     <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to describe the activities at the venue.') %></label>
+    <div class="col-md-10">
+      <%= f.text_area :activities, :class => "form-control", :placeholder => 'Describe the activities at the venue', :id => 'act_content'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#act_content').summernote();
+        });
+    </script>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+  <div class="form-group">
+    <label for="pros" class="col-md-2 control-label">Highlights&nbsp;
+     <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to describe the pros of the venue.') %></label>
+    <div class="col-md-10">
+      <%= f.text_area :pros, :class => "form-control", :placeholder => 'Describe the pros of the venue', :id => 'pros_content'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#pros_content').summernote();
+        });
+    </script>
+  </div>
+  <div style="clear:both; padding:10px;"></div>
+
+  <div class="form-group">
+    <label for="cons" class="col-md-2 control-label">Concerns&nbsp;
+     <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to describe the concerns of the venue.') %></label>
+    <div class="col-md-10">
+      <%= f.text_area :cons, :class => "form-control", :placeholder => 'Describe the negative aspects or concerns of the venue', :id => 'cons_content'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#cons_content').summernote();
+        });
+    </script>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+  <button onclick="$('#venue_form').submit(); return false;" class="btn btn-default pull-right">
+    <%= 'Add' if @venue.id == nil %>
+    <%= 'Update' if @venue.id != nil %>
+  </button>
+  <br/>
+  <br/>
+
+<% end %>

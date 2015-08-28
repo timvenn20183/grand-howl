@@ -1,0 +1,52 @@
+<div class="row">
+<div class="col-md-12 text-center" style="background:url('/images/wolf.png') center no-repeat; height:150px; background-size: contain;">
+    <div class="text-center" style="padding-left:500px;">
+        <h3 style="line-height:100px;">User login</h3>
+    </div
+</div>
+</div>
+<div style="clear:both; padding:10px;"></div>
+
+<hr/>
+<br/>
+
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<p>
+			Please login to access the additional sections of this website. If you do not have a username and password and would like to contribute please use the <a href="/register">Register</a> menu option.
+			</p>
+			<br/>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+	<div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Login
+				</div>
+				<div class="panel-body">
+					<% if !@msg.blank? %>
+					<div class="alert alert-warning" role="alert">
+  						<a href="/login" class="alert-link">There was a problem with your credentials.</a>
+					</div>
+					<% end %>
+					<form action="loginprocess" method="post">
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					  <div class="form-group">
+					    <label for="InputEmail1">Email address</label>
+					    <input type="email" class="form-control" id="InputEmail" name="email" placeholder="Enter email">
+					  </div>
+					  <div class="form-group">
+					    <label for="InputPassword1">Password</label>
+					    <input type="password" class="form-control" id="InputPassword" name="password"	 placeholder="Password">
+					  </div>
+					  <button type="submit" class="btn btn-success pull-right">Login</button>
+					</form>
+				</div>
+        	</div>
+        </div>
+        <div class="col-md-3"></div>
+	</div>

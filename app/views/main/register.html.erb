@@ -1,0 +1,63 @@
+<div class="row">
+<div class="col-sm-12 text-center" style="background:url('/images/wolf.png') center no-repeat; height:150px; background-size: contain;">
+    <div class="text-center" style="padding-left:500px;">
+        <h3 style="line-height:100px;">Register</h3>
+    </div
+</div>
+</div>
+<div style="clear:both; padding:10px;"></div>
+
+<hr/>
+<br/>
+	<div class="row">
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<p>
+			Please complete the form below. Once complete your registration will be activated by a site administrator. Please allow time for the administrator to approve your registration
+			</p>
+			<br/>
+		</div>
+		<div class="col-md-2"></div>
+	</div>
+	<div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					Your details
+				</div>
+				<div class="panel-body">
+					<% if !@user.errors.blank? %>
+					<div class="alert alert-warning" role="alert">
+  						<a href="/login" class="alert-link">There was a problem with your registration.</a>
+					</div>
+					<% end %>
+					<form action="registerprocess" method="post">
+					<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+					<div class="form-group <%= 'has-error' if !@user.errors.messages[:name].blank? %>">
+					    <label for="InputEmail1">Name and surname</label>
+					    <input type="name" class="form-control" id="InputName" name="name" placeholder="Enter name and surname" value="<%= @user.name %>">
+					  </div>
+					  <div class="form-group  <%= 'has-error' if !@user.errors.messages[:email].blank? %>">
+					    <label for="InputEmail1">Email address</label>
+					    <input type="email" class="form-control" id="InputEmail" name="email" placeholder="Enter email" value="<%= @user.email %>">
+					  </div>
+					  <div class="form-group  <%= 'has-error' if !@user.errors.messages[:pass].blank? %>">
+					    <label for="InputPassword1">Password</label>
+					    <input type="password" class="form-control" id="InputPassword" name="password"	 placeholder="Password">
+					  </div>
+					  <div class="form-group  <%= 'has-error' if !@user.errors.messages[:pass].blank? %>">
+					    <label for="InputPassword1">Confirm password</label>
+					    <input type="password" class="form-control" id="InputConfirmPassword" name="confirmpassword"	 placeholder="Confirm password">
+					  </div>
+                      <div class="form-group">
+                        <label for="group">Group</label>
+                        <input type="group" class="form-control" id="group" name="group" placeholder="Enter your group">
+                      </div>
+					  <button type="submit" class="btn btn-success pull-right">Register</button>
+					</form>
+				</div>
+        	</div>
+        </div>
+        <div class="col-md-2"></div>
+	</div>

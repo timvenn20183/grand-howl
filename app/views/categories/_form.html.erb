@@ -1,0 +1,106 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr class="primary">
+      <td>
+        &nbsp;
+      </td>
+    </tr>
+  </thead>
+</table>
+<%= form_for(@category, :html => { :id => "category_form", :class => 'form-inline',:multipart => true}) do |f| %>
+  <% if @category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h2>
+
+      <ul>
+      <% @category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+    <%= image_tag(@category.image, :class => 'pull-right') if !@category.image.blank? %>
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Name</label>
+    <div class="col-md-10">
+        <input type="text" class="form-control" id="name" name="category[name]" placeholder="<%= @category.name %>" value="<%= @category.name %>">
+    </div>
+    <div style="clear:both; padding:10px;"></div>
+        <label for="image" class="col-md-2 control-label">Image</label>
+        <div class="col-md-10">
+            <input type="file" class="form-control" id="image" name="category[image]">
+        </div>
+        <div style="clear:both; padding:10px;"></div>
+        <br/><br/>
+        <button onclick="$('#category_form').submit(); return false;" class="btn btn-default pull-right">
+            <%= 'Add' if @category.id == nil %>
+            <%= 'Update' if @category.id != nil %>
+        </button>
+  </div>
+<% end %>
+  <div style="clear:both; padding:10px;"></div>
+
+    <% if @category.id != nil then %>
+      <hr/>
+      <% geturl = url_for :controller => 'categories', :action => 'custom_update' %>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:advancements] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&advancements=1'});"> Category allows advancement selection
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_time] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_time=1'});"> Category allows a time allocation
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_theme] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_theme=1'});"> Category has a theme / description
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_outcome] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_outcome=1'});"> Category has an outcome
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_badge] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_badge=1'});"> Category has a badge
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_instructions] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_instructions=1'});"> Category has instructions
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_story] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_story=1'});"> Category may have a story
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_song] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_song=1'});"> Category may have a song
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_play] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_play=1'});"> Category may have a play
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_resources] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_resources=1'});"> Category has resources
+        </label>
+      </div>
+      <div class="checkbox">
+        <label>
+        <input type="checkbox" <%=raw ' checked ' if @category.options[:has_other] == true %> onchange="$.ajax({url : '<%= geturl %>?cat_id=<%= @category.id %>&has_other=1'});"> Category has other
+        </label>
+      </div>
+    <% end %>
+    <hr/>
+    <div id="cattype">
+        <%= render :partial => 'cattypes/index' if @category.id != nil %>
+    </div>
+

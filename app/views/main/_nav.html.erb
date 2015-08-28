@@ -1,0 +1,51 @@
+<div id="sidebar-wrapper">
+    <ul class="sidebar-nav">
+        <li class="sidebar-brand">
+            <a href="/">
+                <font style="color:#eee">Grand Howl</font>
+            </a>
+        </li>
+        <% if is_logged_in and 2==1%>
+            <li>
+                <font style="color:#eee;"><h5><%= current_user_name.gsub(" ","") %></h5></font>
+            </li>
+        <% end %>
+<form id="search_form" class="form-inline " action="/search" method="get">
+<div class="input-group" style="padding-left:5px; padding-right:5px; padding-bottom:5px;">
+<input type="text" name="search" class="form-control input-sm" placeholder="Search for...">
+<span class="input-group-addon" style="cursor:pointer;" onclick="$('#search_form').submit(); return false;">
+<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+</span>
+</div>
+</form>
+        <% Category.visable.each do |cat| %>
+            <% if cat.entries.count > 0 %>
+            <li>
+                <a href="/categories/<%= cat.friendly_id %>"><font style="color:#ddd;"><%= cat.name.pluralize %> (<%= cat.entries.count %>)</font>
+                </a>
+            </li>
+            <% end %>
+        <% end %>
+        <li>
+            <a href="/venues"><font style="color:#eee;">Venues (<%= Venue.all.count %>)</font></a>
+        </li>
+        <li>
+            <a href="/programs"><font style="color:#eee;">Programs (<%= Program.for_all.count %>)</font></a>
+        </li>
+        <% if !is_logged_in %>
+            <%= render :partial => '/main/public_nav' %>
+        <% end %>
+        <% if is_admin_user %>
+            <%= render :partial => '/main/admin_nav' %>
+        <% end %>
+        <% if is_logged_in and !is_admin_user %>
+            <%= render :partial => '/main/user_nav' %>
+        <% end %>
+	<li class="text-center">
+		<br/>
+		<!--<img src="/images/howl.png"width=100/>-->
+	</li>
+    </ul>
+</div>
+
+

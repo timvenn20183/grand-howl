@@ -1,0 +1,104 @@
+<div class="btn-group form-inline">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+      Add entry
+      <span class="caret"></span>
+    </button>&nbsp;
+    <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this option to create a new entry by first selecting the category from the dropdown when clicking the button') %>
+    <ul class="dropdown-menu" role="menu">
+        <% Category.visable.each do |category| %>
+            <li><%= link_to category.name, :controller => 'entries', :action => 'new', :cat_id => category.friendly_id %></li>
+        <% end %>
+    </ul>
+    &nbsp;&nbsp;
+    <input type="text" onkeyup="keypressed();" class="form-control" id="search" name="search" placeholder="Quick filter">
+    &nbsp;
+       <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Use this option to quicly filter the list by name') %>
+</div>
+<h3 class="pull-right">Entries for <%= current_user.name %></h3>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr class="primary">
+			<td>
+				Entry
+			</td>
+			<td>
+				Cateogry
+			</td>
+			<td>
+				Advancement
+			</td>
+			<td>
+				Type
+			</td>
+			<% if is_admin_user %>
+			<td>
+				User
+			</td>
+			<% end %>
+			<td align="right">
+				Action&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<% @entries.each do |entry| %>
+			<tr style="cursor:pointer" title="Click to edit" class="filterlist" id="<%= entry.slug %>">
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>/edit'">
+					<%= entry.name %>
+				</td>
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>/edit'">
+					<%= entry.category.name  %>
+				</td>
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>/edit'">
+					<%= entry.advancement.name if !entry.advancement.blank? %>
+				</td>
+				<td onclick="window.location.href = '/entries/<%= entry.slug %>/edit'">
+					<%= entry.cattype.name if !entry.cattype.blank? %>
+				</td>
+
+				<% if is_admin_user %>
+					<td>
+						<%= entry.user.name %>
+					</td>
+				<% end %>
+				<td align="right">
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-eye-open', :style => 'color : #333;', :title => 'Click to view'), { controller: :entries, action: :show, id: entry.friendly_id }, method: :get %>
+					&nbsp;&nbsp;
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;', :title => 'Click to edit'), { controller: :entries, action: :edit, id: entry.friendly_id }, method: :edit %>
+					&nbsp;&nbsp;
+					<% if entry.can_delete %>
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-trash', :style => 'color : #333;', :title => 'Click to delete	'), { controller: :entries, action: :destroy, id: entry.friendly_id }, method: :delete, data: { confirm: 'Are you sure you wish to delete this entry ?' } %>
+					<% else %>
+						&nbsp;&nbsp;
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<div class="row">
+	<div class="col-md-12 text-center">
+		<%= will_paginate @entries, renderer: BootstrapPagination::Rails %>
+	</div>
+</div>
+<script>
+$('.dropdown-toggle').dropdown()
+</script>
+
+<script>
+function keypressed() {
+    var val = $('#search').val();
+    var patt = new RegExp(val);
+    if (val.length > 3) {
+        $('.filterlist').each(function() {
+        if (!patt.test(this.id) == true) {
+            $(this).hide();
+        }
+    });
+    } else {
+        $('.filterlist').show();
+    };
+
+}
+</script>

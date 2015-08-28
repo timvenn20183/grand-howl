@@ -1,0 +1,81 @@
+<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-plus', :style => 'color : #333;'), { controller: :categories, action: :new } %>
+<h3 class="pull-right">Categories</h3>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr class="primary">
+			<td>
+				Name
+			</td>
+			<td>
+				Types
+			</td>
+            <td width="50" align="center">
+                Picture
+            </td>
+			<td align="right" width="100">
+				Action&nbsp;
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<% @categories.each do |category| %>
+			<tr style="cursor:pointer">
+				<td  onclick="window.location.href = '/categories/<%= category.slug %>/edit'">
+					<%= category.name %>
+				</td>
+				<td  onclick="window.location.href = '/categories/<%= category.slug %>/edit'">
+				<% if category.cattypes.count > 0 %>
+            		<span class="badge">
+                <%= category.cattypes.count %>
+            	</span>
+            	<% end %>&nbsp;
+            	</td>
+                <td align="center"  onclick="window.location.href = '/categories/<%= category.slug %>/edit'">
+                    <% if !category.image.blank? %>
+                        <img src="<%=category.image.url(:list) %>" data-toggle="modal" onclick="show('<%= category.image.url(:view) %>');" data-target="#myModal" style="cursor:pointer;">
+                    <% end %>
+                </td>
+				<td align="right">
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-cog', :style => 'color : #333;'), { controller: :categories, action: :edit, id: category.friendly_id }, method: :edit %>
+					&nbsp;&nbsp;
+                    <% if category.entries.count == 0 %>
+					<%= link_to content_tag(:span,'', :class => 'glyphicon glyphicon-trash', :style => 'color : #333;'), { controller: :categories, action: :destroy, id: category.friendly_id }, method: :delete, data: { confirm: 'Are you sure you wish to delete this category ?' } %>
+                    <% end %>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td>
+                <img id="modal_image" src="//placehold.it/1000x600" class="img-responsive">
+            </td></tr></table>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function centerModal() {
+    $(this).css('display', 'block');
+    var $dialog = $(this).find(".modal-dialog");
+    var offset = ($(window).height() - $dialog.height()) / 2;
+    // Center modal vertically in window
+    $dialog.css("margin-top", offset);
+}
+
+$('.modal').on('show.bs.modal', centerModal);
+$(window).on("resize", function () {
+    $('.modal:visible').each(centerModal);
+});
+
+function show(image) {
+    $('#modal_image').attr('src',image);
+}
+</script>
+

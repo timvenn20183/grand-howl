@@ -1,0 +1,80 @@
+<table class="table table-striped table-hover">
+  <thead>
+    <tr class="primary">
+      <td>
+        &nbsp;
+      </td>
+    </tr>
+  </thead>
+</table>
+<div class="row">
+<div class="col-md-12">
+<%= form_for(@advancement, :html => { :id => "advancement_form", :multipart => true}) do |f| %>
+  <% if @advancement.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@advancement.errors.count, "error") %> prohibited this advancement from being saved:</h2>
+
+      <ul>
+      <% @advancement.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <label for="name" class="col-md-2 control-label">Name</label>
+    <div class="col-md-8">
+        <input type="text" class="form-control" id="name" name="advancement[name]" placeholder="<%= @advancement.name %>" value="<%= @advancement.name %>">
+    </div>
+   </div>
+
+    <div style="clear:both; padding:5px;"></div>
+
+  <div class="form-group">
+    <label for="advancement_level_id" class="col-md-2 control-label">Level</label>
+    <div class="col-md-4">
+        <%= select("advancement", "advlevel_id", Advlevel.all.collect {|p| [ p.name, p.id ] },{:include_blank => true}, {class: 'form-control'})%>
+    </div>
+  </div>
+
+  <div style="clear:both; padding:5px;"></div>
+
+  <div class="form-group">
+    <label for="advancement_challenge_id" class="col-md-2 control-label">Challenge</label>
+    <div class="col-md-4">
+        <%= select("advancement", "challenge_id", Challenge.all.collect {|p| [ p.name, p.id ] },{:include_blank => true}, {class: 'form-control'})%>
+    </div>
+  </div>
+  <div style="clear:both; padding:5px;"></div>
+
+  <div class="form-group">
+    <label for="descontent" class="col-md-2 control-label">Description</label>
+    <div class="col-md-10">
+        <%= f.text_area :description, :class => "form-control", :placeholder => 'Supply a description', :id => 'descontent'%>
+    </div>
+    <script>
+        $(document).ready(function() {
+          $('#descontent').summernote();
+        });
+    </script>
+  </div>
+
+  <div style="clear:both; padding:10px;"></div>
+
+  <button onclick="$('#advancement_form').submit(); return false;" class="btn btn-default pull-right">
+   <%= 'Add' if @advancement.id == nil %>
+    <%= 'Update' if @advancement.id != nil %>
+
+  </button>
+<% end %>
+</div>
+</div>
+<hr/>
+<script>
+ $('body').on('submit', 'form', function () {
+        //console.log($(this));
+/*        console.info($('form').serializeArray())*/
+        return true;
+
+    });
+</script>

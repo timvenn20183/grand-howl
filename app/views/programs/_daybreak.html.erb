@@ -1,0 +1,28 @@
+            <tr background = "/images/night-table-blue.jpg" class="dropentry" id="drop_day_<%= d.to_s %>">
+                <td style="padding-top:12px;" colspan="1">
+                    <font color="#fff"><strong><%= t.to_date %></strong></font>
+                </td>
+                <td colspan="3">
+                    <div class='date input-group col-sm-3' id='break_day_<%= d.to_s %>' style='padding-left:15px;'>
+                       <input type="text" id="break_<%= d.to_s %>" name="break_<%= d.to_s %>" class="form-control input-sm" value="<%= t.strftime('%H:%M') %>">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span>
+                        </span>
+                    </div>
+                        <script type="text/javascript">
+                            $(function () {
+                            $('#break_day_<%= d.to_s %>').datetimepicker({format: 'H:mm', stepping: 5, showClose: true});
+                            });
+                        </script>
+                </td>
+                <td colspan="3" style="padding-top:12px;">
+                    <strong><font color="#fff"><%= (d).ordinalize %> day</font></strong>
+                </td>
+            </tr>
+<script>
+    $('#break_day_<%=d.to_s %>').change(function() {
+        <% geturl = url_for :controller => 'programs', :action => 'update_daybreak' %>
+        var temp = ($('#break_<%=d.to_s %>').val());
+        $.ajax({url : '<%= geturl %>?time=' + temp + '&day=<%=d.to_s%>&date=<%= t.to_date%>'});
+    });
+</script>
+

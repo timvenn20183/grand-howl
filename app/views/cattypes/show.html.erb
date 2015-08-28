@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @cattype.name %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @cattype.category_id %>
+</p>
+
+<%= link_to 'Edit', edit_cattype_path(@cattype) %> |
+<%= link_to 'Back', cattypes_path %>

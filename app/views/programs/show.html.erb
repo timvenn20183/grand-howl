@@ -1,0 +1,78 @@
+<strong><h2><%= @program.name %></h2></strong>
+<strong><%= @program.real_start_time.to_s(:short) %></strong>
+<br/>
+<strong>Duty six : <%= @program.duty_six %></strong>
+<% time_line = @program.real_start_time %>
+<br/><br/>
+<table align="center" width="100%" border="1" cellspacing="0" cellpadding="0">
+<thead>
+    <th width="100">
+        Start
+    </th>
+    <th width="50">
+        Time
+    </th>
+    <th>
+        Activity
+    </th>
+    <th>
+        Requirements
+    </th>
+    <th>
+        Instructions
+    </th>
+    <th>
+        Scouter
+    </th>
+</thead>
+<tbody>
+<% @program.ordered_entries.each do |entry| %>
+    <% ls = entry.lsentences.where(:program => @program).first %>
+    <% if !ls.blank? and !ls.comment.blank? %>
+    <tr style="background-color:#dde5ec">
+        <td colspan="6" align="center">
+           <strong><%= ls.comment %></strong>
+        </td>
+    </tr>
+    <% end %>
+    <tr>
+        <td valign="top">
+            <%= time_line.to_s(:short) %>
+        </td>
+        <td valign="top">
+            <%= entry.real_time(@program).to_s %>
+        </td>
+        <td valign="top">
+            <strong><%= entry.category.name + " : " if !entry.category.blank? %></strong>
+            <%= entry.name %>
+        </td>
+        <td valign="top">
+            <%=raw entry.resources %>
+        </td>
+        <td valign="top">
+            <%=raw entry.instructions if !entry.instructions.blank?%>
+            <%= 'See attached' if entry.instructions.blank? %>
+        </td>
+        <td valign="top" align="center">
+            <%= Eventscouter.where(:program => @program, :entry => entry).first.scouter.name %>
+        </td>
+        <% time_line = time_line + entry.real_time(@program).minutes if @program.ordered_entries.index(entry) %>
+    </tr>
+<% end %>
+</tbody>
+</table>
+<br/>
+Programme prepared <%= "by " + current_user.name if !current_user.blank? %> <%= " of " + current_user.group.to_s if !current_user.blank? and !current_user.group.blank? %> on <%= Time.now.to_s(:short) %>
+
+<% if !@program.venue.blank? %>
+    <%=raw '<div style="page-break-after: always;"></div>' %>
+    <% @venue = @program.venue %>
+    <%= render :partial => '/venues/show' %>
+<% end %>
+
+<% @program.ordered_entries.each do |entry| %>
+    <% @entry = entry %>
+    <%=raw '<div style="page-break-after: always;"></div>' if @entry.instructions.blank? %>
+    <%= render :partial => '/entries/show' if @entry.instructions.blank? %>
+<% end %>
+

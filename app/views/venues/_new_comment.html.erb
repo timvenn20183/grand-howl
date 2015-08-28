@@ -1,0 +1,25 @@
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <% @comment = Comment.new %>
+                Your comment ...
+            </div>
+            <div class="panel-body">
+                <form action="/venue_comment" method="post" data-remote="true">
+                 <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+                 <input name="venue_slug" value="<%= @venue.slug %>" type="hidden">
+
+                <div class="col-md-12">
+
+                  <textarea rows="1" class="form-control" name="message" placeholder='Please comment ...'></textarea>
+               </div>
+    <div style="clear:both;padding:5px;"></div>
+                <div class="col-md-12">
+                    <button class="btn btn-default pull-right">Comment</button>
+                </div>
+
+              </div>
+
+                </form>
+            </div>
+        </div>

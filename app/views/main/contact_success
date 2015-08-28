@@ -1,0 +1,9 @@
+<div class="row">
+	<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<div class="alert alert-success" role="alert">
+  				<p>Your message has been sent. Thank you for contacting the website.<p>
+			</div>
+		</div>
+	<div class="col-md-2"></div>
+</div>

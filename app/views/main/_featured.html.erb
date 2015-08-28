@@ -1,0 +1,26 @@
+<% if @featured.size > 0 %>
+<div class="row">
+    <div class="col-md-12">
+    <h4>Featured</h4>
+    </div>
+</div>
+<div class="row">
+	<% @featured.each do |entry| %>
+		<div class="col-sm-4 text-center">
+			<div class="panel panel-primary" style="cursor:pointer;height:320px;" onclick="window.location.href = '/entries/<%= entry.slug %>'">
+				<div class="panel-heading">
+					 <%= entry.category.name %> : <%= entry.name %>
+				</div>
+				<div class="panel-body">
+					<%= image_tag(entry.raw.url(:landing), :class => 'img-rounded img-responsive') if !entry.raw.blank? %>
+					<%= image_tag(entry.category.image.url(:landing)) if !entry.category.image.blank? and entry.raw.blank? %>
+                    <%= image_tag(entry.badge.image.url(:thumb),:title => entry.badge.name,:style=>"z-index:1000;position:absolute;left:0px;top:0px;padding: 50px 30px;") if !entry.badge.blank? and !entry.badge.image.blank? %>
+					<% if entry.category.image.blank? %>
+						<%= entry.readmore %> ...
+					<% end %>
+				</div>
+			</div>
+		</div>
+	<% end %>
+</div>
+<% end %>

@@ -1,0 +1,20 @@
+<div id="comments_section">
+<div class="row">
+<% if is_logged_in %>
+    <%= render :partial => '/venues/new_comment' %>
+<% end %>
+<% @venue.comments.order('created_at desc').each do |comment| %>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <%= comment.user.name %> <%= " of " + comment.user.group if !comment.user.group.blank? %>
+                <span class="pull-right"><%= comment.created_at.to_date.to_s %>&nbsp;<%= comment.created_at.strftime("%H:%M:%S") %>
+            </div>
+            <div class="panel-body">
+                <%=raw comment.message.gsub("\r","<br/>")%>
+            </div>
+        </div>
+    </div>
+<% end %>
+</div>
+</div>

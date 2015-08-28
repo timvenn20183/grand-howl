@@ -22,7 +22,7 @@ class CategoriesController < ApplicationController
         session[:view_style] = params[:view_style] if !params[:view_style].blank?
         set_user_view_style(params[:view_style]) if !params[:view_style].blank?
         @category = Category.find_by_slug(params[:id])
-        @entries = @category.entries.paginate(:page => params[:page], :per_page => per_page)
+        @entries = @category.entries.filtered(session[:user]).paginate(:page => params[:page], :per_page => per_page)
         respond_to do |format|
             format.html
             format.json { render json: @entries.all.map {|model| {:id => model.slug, :name => model.name}}}

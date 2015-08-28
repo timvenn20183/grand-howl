@@ -61,7 +61,7 @@ class EntriesController < ApplicationController
   end
 
   def tokensearch
-    @entries = Entry.where('searchtext LIKE ?',"%#{params[:q]}%")
+    @entries = Entry.filtered(session[:user]).where('searchtext LIKE ?',"%#{params[:q]}%")
     respond_to do |format|
       format.json { render json: @entries.map {|model| {:id => model.id, :name => model.name}}}
     end
@@ -75,9 +75,9 @@ class EntriesController < ApplicationController
             @db_search = "searchtext like '%" + l.to_s + "%'"
             @db_search = @db_search + " or " if @list.index(l) != @list.count-1
         end
-        @entries = Entry.where(@db_search.downcase).paginate(:page => params[:page], :per_page => per_page)
+        @entries = Entry.filtered(session[:user]).where(@db_search.downcase).paginate(:page => params[:page], :per_page => per_page)
       else
-        @entries = Entry.all.paginate(:page => params[:page], :per_page => per_page)
+        @entries = Entry.filtered(session[:user]).paginate(:page => params[:page], :per_page => per_page)
       end
   end
 
@@ -91,7 +91,7 @@ class EntriesController < ApplicationController
   private
 
     def entry_params
-      params.require(:entry).permit(:name, :category_id, :description, :outcome, :instructions, :other, :resources, :story, :song, :play, :user_id, :cattype_id, :badge_id, :advancement_id, :time, :raw, :isdefault)
+      params.require(:entry).permit(:name, :category_id, :description, :outcome, :instructions, :other, :resources, :story, :song, :play, :user_id, :cattype_id, :badge_id, :advancement_id, :time, :raw, :isdefault, :shared)
     end
 
 end

@@ -72,6 +72,17 @@
       </div>
     <% end %>
 
+     <div style="clear:both; padding:10px;"></div>
+     <div class="form-group">
+        <label class="col-md-2 control-label">
+         Share this entry ?&nbsp;<%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'Do you want to share this entry with everyone else. Remove the checkbox if you would like to use this entry in a program as a place holder or temporary entry until more details are available') %>
+        </label>
+         <div class="col-md-4">
+            <%= f.check_box :shared %>
+         </div>
+      </div>
+
+
     <div style="clear:both; padding:10px;"></div>
     <label for="image" class="col-md-2 control-label">Image&nbsp;
   <%= content_tag(:span,' ', :class => 'glyphicon glyphicon-info-sign', :style => 'color : #0033CC;cursor:help;',:title => 'This option allows you to upload a placeholder image for this entry which will appearr when viewing the entry.') %>

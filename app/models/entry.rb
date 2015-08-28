@@ -23,6 +23,15 @@ class Entry < ActiveRecord::Base
         self.build_search_text
     end
 
+    def self.filtered(*args)
+        if args[0].blank? then
+            return Entry.where(:shared => true)
+        else
+            # all public
+            Entry.where("shared = true OR (shared = false and user_id = ?)",args[0])
+        end
+    end
+
     def build_search_text
         self.searchtext = self.name
         self.searchtext += self.category.name

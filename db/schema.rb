@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150322075215) do
+ActiveRecord::Schema.define(version: 20150828182827) do
 
   create_table "advancements", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20150322075215) do
     t.integer  "views",          limit: 4,        default: 0
     t.string   "raw",            limit: 255
     t.boolean  "isdefault",      limit: 1,        default: false
+    t.boolean  "shared",         limit: 1,        default: true
   end
 
   create_table "entries_programs", id: false, force: :cascade do |t|

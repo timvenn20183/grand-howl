@@ -21,7 +21,7 @@
         <% Category.visable.each do |cat| %>
             <% if cat.entries.count > 0 %>
             <li>
-                <a href="/categories/<%= cat.friendly_id %>"><font style="color:#ddd;"><%= cat.name.pluralize %> (<%= cat.entries.count %>)</font>
+                <a href="/categories/<%= cat.friendly_id %>"><font style="color:#ddd;"><%= cat.name.pluralize %> (<%= cat.entries.filtered(session[:user]).count %>)</font>
                 </a>
             </li>
             <% end %>

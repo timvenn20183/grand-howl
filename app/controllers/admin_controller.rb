@@ -23,7 +23,7 @@ class AdminController < ApplicationController
 	end
 
 	def entries
-		@entries = Entry.all.order(:name)
+		@entries = Entry.order(:name)
 	end
 
     def users

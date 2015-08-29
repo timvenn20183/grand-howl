@@ -80,7 +80,7 @@ table1 { page-break-inside : avoid }
     </table>
 <% end %>
 <br/>
-Programme prepared by <%= current_user.name %> <%= " of " + current_user.group.to_s if !current_user.group.blank? %> on <%= Time.now.to_s(:short) %>
+Programme prepared <%= "by " + current_user.name if !current_user.blank? %> <%= " of " + current_user.group.to_s if !current_user.blank? and !current_user.group.blank? %> on <%= Time.now.to_s(:short) %>
 
 <% if !@program.venue.blank? %>
     <%=raw '<div style="page-break-after: always;"></div>' %>
@@ -90,7 +90,7 @@ Programme prepared by <%= current_user.name %> <%= " of " + current_user.group.t
 
 <% @program.ordered_entries.each do |entry| %>
     <% @entry = entry %>
-    <%=raw '<div style="page-break-after: always;"></div>' if @entry.instructions.blank? %>
-    <%= render :partial => '/entries/show' if @entry.instructions.blank? %>
+    <%=raw '<div style="page-break-after: always;"></div>' if @entry.instructions.blank? or !@entry.documents.blank? %>
+    <%= render :partial => '/entries/show' if @entry.instructions.blank? or !@entry.documents.blank? %>
 <% end %>
 

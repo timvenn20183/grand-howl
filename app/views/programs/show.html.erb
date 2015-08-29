@@ -72,7 +72,7 @@ Programme prepared <%= "by " + current_user.name if !current_user.blank? %> <%= 
 
 <% @program.ordered_entries.each do |entry| %>
     <% @entry = entry %>
-    <%=raw '<div style="page-break-after: always;"></div>' if @entry.instructions.blank? %>
-    <%= render :partial => '/entries/show' if @entry.instructions.blank? %>
+    <%=raw '<div style="page-break-after: always;"></div>' if @entry.instructions.blank? or !@entry.documents.blank?%>
+    <%= render :partial => '/entries/show' if @entry.instructions.blank? or !@entry.documents.blank? %>
 <% end %>
 

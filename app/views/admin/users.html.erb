@@ -12,6 +12,9 @@
             <td>
                 Group
             </td>
+            <td>
+                Joined
+            </td>
 			<td align="right">
 				Active
 			</td>
@@ -29,6 +32,9 @@
                 </td>
                 <td>
                     <%= user.group  %>
+                </td>
+                <td>
+                    <%= user.created_at.to_date %>
                 </td>
 				<td align="right">
                     <div class="bootstrap-switch-container">

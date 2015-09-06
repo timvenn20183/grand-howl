@@ -12,7 +12,7 @@
             $('#loading_image').hide();
     });
     </script>
-
+    <%= render :partial => 'main/google' %>
 <% if @entry.blank? %>
 <meta property="og:image" content="<%= "http://" + request.host %>/images/wolf2.png"/>
 <meta property="og:url" content="<%= "http://" + request.host %>"/>

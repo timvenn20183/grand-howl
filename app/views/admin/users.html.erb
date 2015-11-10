@@ -15,6 +15,9 @@
             <td>
                 Joined
             </td>
+            <td align="center">
+                Entries
+            </td>
 			<td align="right">
 				Active
 			</td>
@@ -35,6 +38,9 @@
                 </td>
                 <td>
                     <%= user.created_at.to_date %>
+                </td>
+                <td align="center">
+                    <%= user.entries.count if user.entries.count > 0 %>
                 </td>
 				<td align="right">
                     <div class="bootstrap-switch-container">
